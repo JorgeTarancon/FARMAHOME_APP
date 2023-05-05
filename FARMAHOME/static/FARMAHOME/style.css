@@ -1,0 +1,166 @@
+.body{
+    background-color:rgba(233, 231, 231, 0.951);
+}
+
+p{
+    font-size:20px
+}
+
+.header {
+position: relative;
+height: 100%;
+color: #ffffff;
+padding: 10px;
+background-color: rgb(98, 114, 157);
+margin-bottom:40px;
+}
+
+.menu_container {
+    padding: 15px;
+    background: white;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 15px; 
+    border: 1.5px solid  #c2c2c2;
+    box-shadow: 10px 10px 5px lightgray;
+}
+
+.home_div {
+    position: relative;
+    height: 100%;
+    color: #ffffff;
+    padding: 10px;
+    background-color: rgb(98, 114, 157);
+    }
+
+.home {
+    background-color: #6c7799;
+    color: white;
+    padding: 2px 2px;
+    text-align: center;
+    text-decoration: none;
+    display: inline;
+    font-size: 15px;
+    cursor: pointer;
+    border: 2px solid black;
+    border-radius: 8px;
+}
+
+.edit_button {
+    background-color: rgb(211, 223, 240);
+    border: 4px solid  #909dc3;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 10px;
+    
+}
+
+.button {
+    background-color: rgb(211, 223, 240);
+    border: none;
+    color: white;
+    padding: 30px 64px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 30px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.button_submit {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin: 2px 1px;
+    cursor: pointer;
+    }
+
+.button1 {
+    background-color: rgb(211, 223, 240);
+    color: black; 
+    border: 5px solid  #909dc3;
+    border-radius: 15px;
+    width: 250px;
+}
+
+.button2 {
+    background-color: rgb(211, 223, 240); 
+    color: black; 
+    border: 5px solid  #909dc3;
+    padding: 10px 10px;
+    border-radius: 15px;
+    border: 4px solid  #909dc3;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    }
+
+.container {
+    border-radius: 5px;
+    background-color: rgb(211, 223, 240);
+    padding: 50px;
+  }
+  
+.container input[type=text], select, textarea {
+width: 100%;
+padding: 12px;
+border: 1px solid #ccc;
+border-radius: 4px;
+resize: vertical;
+}
+
+.container_login {
+    border-radius: 5px;
+    background-color: rgb(211, 223, 240);
+    padding: 50px;
+  }
+
+.styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 1em;
+    font-family: 'Times New Roman';
+    width: 97%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.styled-table thead tr {
+    background-color: rgb(98, 114, 157);
+    color: #ffffff;
+    text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+}
+
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid rgb(98, 114, 157);
+}
+
+.styled-table tbody tr.active-row {
+    color:black;
+}
+
+#username {
+    color:black;
+}

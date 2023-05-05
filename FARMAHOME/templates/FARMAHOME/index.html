@@ -1,0 +1,18 @@
+{% extends "FARMAHOME/basic.html" %}
+
+{% block subtitle %}
+Aplicación de seguimiento de medicamentos a domicilio
+{% endblock %}
+
+{% block body %}
+  <div class="menu_container">
+	<div>
+      <a class="button button1" href="{% url 'FARMAHOME:subir_datos' %}">Subir documento</a>
+    </div>
+    <div>
+      <a class="button button1" href="{% url 'FARMAHOME:entregar_pedido' %}">Entregar pedidos</a>
+    </div>
+    <div>
+      <a class="button button1" href="{% url 'FARMAHOME:ver_pedidos' %}">Ver pedidos</a>
+    </div>
+{% endblock %}

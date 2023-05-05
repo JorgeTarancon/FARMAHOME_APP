@@ -1,0 +1,17 @@
+{% extends "FARMAHOME/basic.html" %}
+
+{% block subtitle %}
+Login
+{% endblock %}
+
+{% block body %}
+
+<div class="container_login">
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="button button2" type="submit">Login</button>
+  </form>
+</div>
+
+{% endblock %}

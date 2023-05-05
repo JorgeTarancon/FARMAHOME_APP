@@ -1,0 +1,44 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{% static 'FARMAHOME/style.css' %}">
+
+<head>
+  <title>FARMAHOME HUF</title>
+</head>
+
+
+<body>
+
+  <div class="home_div">
+    <a class="home" href="{% url 'FARMAHOME:index' %}">Inicio</a>
+    {% block subbotton %}{% endblock %}
+    {% if user.is_authenticated %}
+      <a class="home" href="{% url 'FARMAHOME:user_logout' %}">Logout</a>
+    {% endif %}
+  </div>
+
+  <center>
+    <div class="header">
+      <h1>FARMAHOME</h1>
+      <p>{% block subtitle %}{% endblock %}</p>
+    </div>
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% block body %}
+    {% endblock %}
+  </center>
+
+</body>
+
+</html>

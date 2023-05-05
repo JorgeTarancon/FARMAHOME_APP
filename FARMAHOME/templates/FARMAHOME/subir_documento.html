@@ -1,0 +1,23 @@
+{% extends "FARMAHOME/basic.html" %}
+
+{% block subtitle %}
+Subir documento
+{% endblock %}
+
+{% block body %}
+<div class="menu_container">
+    <form method = "POST" enctype="multipart/form-data">
+        <div class="menu_tittle_container ">
+            <p> <h2> <font face="Times New Roman">Seleccione un archivo para subir:</font> </h2> </p>
+        
+            {% csrf_token %}
+        
+        <input type="file" name="archivo">
+        <p>
+            <button class="button1" type="submit">
+                <font face="Times New Roman">Subir</font>
+            </button>
+        </p>
+    </form>
+</div>
+{% endblock %}

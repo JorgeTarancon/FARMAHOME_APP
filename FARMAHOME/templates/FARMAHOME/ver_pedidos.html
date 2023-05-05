@@ -1,0 +1,40 @@
+{% extends "FARMAHOME/basic.html" %}
+
+{% block subtitle %}
+Ver pedidos
+{% endblock %}
+
+{% block body %}
+<table class = "styled-table" >
+    <thead>
+        <tr>
+        <th scope="col">DIRECCIÓN</th>
+        <th scope="col">CP</th>
+        <th scope="col">ESTADO</th>
+        <th scope="col">FECHA REGISTRO</th>
+        <th scope="col"></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for results in todos_pedidos %}
+        <tr class="active-row">
+            <td>{{ results.direccion }}</td>
+            <td>{{ results.cp }}</td>
+            <td>{{ results.estado }}</td>
+            <td>{{ results.fecha_registro}}</td>
+            {% if results.fecha_registro is null %}
+                <td><div><a class="edit_button" href="entregar_pedido/{{ results.id }}">Editar</a></div> 
+            {% else %}
+                <td><div><a class="edit_button">Editar</a></div>
+            {% endif %}
+        </tr>
+    </tbody>
+
+{% endfor %}
+</table>
+    </center>
+<div class="col-md-4">
+    <a class="button button2" href="{% url 'FARMAHOME:exportar_excel' %}">Descargar</a>
+</div>
+{% endblock %}
