@@ -50,24 +50,24 @@ def subir_datos(request):
 
                 return render(request, "FARMAHOME/subir_documento.html", {"form":form})
             #file.rename({
-                        #'CITA':'dia_cita',
-                        #'CÓDIGO POSTAL':'cp',
+                        #'CITA':'fecha_cita',
+                        #'CÓDIGO POSTAL':'codigo_postal',
                         #'DIRECCIÓN':'direccion',
                         #'NHC':'nhc',
                         #'MÓVIL':'movil',
-                        #'AGENDA':'agenda',
-                        #'ESTADO':'estado'}, axis='columns', inplace=True)
+                        #'AGENDA':'agenda_cita',
+                        #'ESTADO':'estado_entrega'}, axis='columns', inplace=True)
             #engine = create_engine('sqlite:///db.sqlite3')
             #file.to_sql('FARMAHOME_datoreparto', index=False, if_exists='append', con=engine)
             for index in file.index:
                 new_value = DatoReparto(
-                    dia_cita = file.loc[index,'CITA'],
-                    cp = file.loc[index,'CÓDIGO POSTAL'],
+                    fecha_cita = file.loc[index,'CITA'],
+                    codigo_postal = file.loc[index,'CÓDIGO POSTAL'],
                     direccion = file.loc[index,'DIRECCIÓN'],
                     nhc = file.loc[index,'NHC'],
                     movil = file.loc[index,'MÓVIL'],
-                    agenda = file.loc[index,'AGENDA'],
-                    estado = file.loc[index,'ESTADO']
+                    agenda_cita = file.loc[index,'AGENDA'],
+                    estado_entrega = file.loc[index,'ESTADO']
                 )
                 new_value.save()
             
@@ -87,7 +87,7 @@ def subir_datos(request):
 
 @login_required
 def ver_pedidos(request):
-    todos_pedidos = DatoReparto.objects.filter(dia_cita__date=timezone.now().date())
+    todos_pedidos = DatoReparto.objects.filter(fecha_cita__date=timezone.now().date())
     return render(request, "FARMAHOME/ver_pedidos.html", {'todos_pedidos':todos_pedidos} )
 
 @login_required
@@ -98,10 +98,10 @@ def entregar_pedido(request,id=None):
             form = FormularioEntregarPedido(request.POST)
             if form.is_valid():
                 direccion_selected = request.POST.get('direccion', False)
-                entrega = get_object_or_404(DatoReparto, direccion=direccion_selected, dia_cita__date=timezone.now().date())
+                entrega = get_object_or_404(DatoReparto, direccion=direccion_selected, fecha_cita__date=timezone.now().date())
                 
                 entrega.DNI = request.POST.get('dni', False)
-                entrega.estado = request.POST.get('estado', False)
+                entrega.estado_entrega = request.POST.get('estado_entrega', False)
                 entrega.fecha_registro = datetime.now()
                 entrega.incidencias = request.POST.get('incidencias', None)
                 entrega.usuario_registro = request.user.username
@@ -110,7 +110,7 @@ def entregar_pedido(request,id=None):
                 return HttpResponseRedirect('/')
         else:
             entrega = get_object_or_404(DatoReparto, pk=id)
-            form = FormularioEntregarPedido(initial={'direccion':entrega.direccion,'estado':entrega.estado,'dni':entrega.DNI})
+            form = FormularioEntregarPedido(initial={'direccion':entrega.direccion,'estado_entrega':entrega.estado_entrega,'dni':entrega.DNI})
         return render(request, "FARMAHOME/entregar_pedido.html", {'form':form})
     
     else: # It means we have accessed this page from Entregar pedidos, so we do not pass any id and we want to see all pedidos.
@@ -118,10 +118,10 @@ def entregar_pedido(request,id=None):
             form = FormularioEntregarPedido(request.POST)
             if form.is_valid():
                 direccion_selected = request.POST.get('direccion', False)
-                entrega = get_object_or_404(DatoReparto, direccion=direccion_selected, dia_cita__date=timezone.now().date())
+                entrega = get_object_or_404(DatoReparto, direccion=direccion_selected, fecha_cita__date=timezone.now().date())
                 
                 entrega.DNI = request.POST.get('dni', False)
-                entrega.estado = request.POST.get('estado', False)
+                entrega.estado_entrega = request.POST.get('estado_entrega', False)
                 entrega.fecha_registro = datetime.now()
                 entrega.incidencias = request.POST.get('incidencias', None)
                 entrega.usuario_registro = request.user.username
@@ -151,7 +151,7 @@ def exportar_excel(request):
         work_sheet.write(row_num, col_num, columns[col_num], font_style)
 
     font_style = xlwt.XFStyle()
-    rows = DatoReparto.objects.filter(dia_cita__date=timezone.now().date()).values_list('dia_cita', 'cp', 'direccion', 'nhc', 'movil', 'agenda', 'estado', 'DNI', 'incidencias', 'fecha_registro', 'usuario_registro')
+    rows = DatoReparto.objects.filter(fecha_cita__date=timezone.now().date()).values_list('fecha_cita', 'codigo_postal', 'direccion', 'nhc', 'movil', 'agenda_cita', 'estado_entrega', 'DNI', 'incidencias', 'fecha_registro', 'usuario_registro')
     for row in rows:
         row_num += 1
         for col_num in range(len(row)):

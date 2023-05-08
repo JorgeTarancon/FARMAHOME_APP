@@ -20,8 +20,8 @@ Ver pedidos
         {% for results in todos_pedidos %}
         <tr class="active-row">
             <td>{{ results.direccion }}</td>
-            <td>{{ results.cp }}</td>
-            <td>{{ results.estado }}</td>
+            <td>{{ results.codigo_postal }}</td>
+            <td>{{ results.estado_entrega }}</td>
             <td>{{ results.fecha_registro}}</td>
             {% if results.fecha_registro is null %}
                 <td><div><a class="edit_button" href="entregar_pedido/{{ results.id }}">Editar</a></div> 

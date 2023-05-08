@@ -11,14 +11,14 @@ class FormularioEntregarPedido(forms.Form):
                 ("No entregado: No hay nadie en casa", "No entregado: No hay nadie en casa"),
             )
 
-    direccion = forms.ModelChoiceField(queryset = DatoReparto.objects.filter(estado='Sin revisar', dia_cita__date=datetime.date.today())\
+    direccion = forms.ModelChoiceField(queryset = DatoReparto.objects.filter(estado_entrega='Sin revisar', fecha_cita__date=datetime.date.today())\
                                                                         .values_list('direccion', flat=True),
                                        #empty_label = None,
                                        required = True,
                                        to_field_name = 'direccion',
                                        label = 'Direccion'
                                        )
-    estado = forms.ChoiceField(
+    estado_entrega = forms.ChoiceField(
                                 choices = ESTADOS,
                                 required = True,
                                 label = 'Estado de la entrega')
