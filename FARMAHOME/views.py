@@ -35,6 +35,7 @@ def index(request):
     return render(request, "FARMAHOME/index.html", context)
 
 @login_required
+@permission_required(perm='FARMAHOME.can_upload_data', raise_exception=True)
 def subir_datos(request):
     if request.method == 'POST':
         file = request.FILES
@@ -63,9 +64,11 @@ def subir_datos(request):
                 new_value.save()
             
         elif file['archivo'].name.split('.')[-1] == 'csv':
-            file = pd.read_csv(file['archivo'])
+            #file = pd.read_csv(file['archivo'])
+            pass
         else:
-            return render(request, "FARMAHOME/index.html", {})
+            #return render(request, "FARMAHOME/index.html", {})
+            pass
 
         return render(request, "FARMAHOME/index.html", {})
     else:
@@ -79,6 +82,7 @@ def ver_pedidos(request):
     return render(request, "FARMAHOME/ver_pedidos.html", {'todos_pedidos':todos_pedidos} )
 
 @login_required
+@permission_required(perm='FARMAHOME.can_register_data', raise_exception=True)
 def entregar_pedido(request,id=None):
     if id: # It means we have accessed this page from Editar pedido, and we only want to see that pedido in particular.
         if request.method == 'POST':

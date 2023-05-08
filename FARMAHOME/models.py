@@ -20,4 +20,6 @@ class DatoReparto(models.Model):
     fecha_registro = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        permissions = (('can_download_data', 'Can download data.'),)
+        permissions = (('can_download_data', 'Can download data.'),
+                       ('can_upload_data','Can upload data.'),
+                       ('can_register_data','Can register data.'),)
