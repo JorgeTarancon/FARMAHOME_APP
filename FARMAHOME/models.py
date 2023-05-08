@@ -18,6 +18,7 @@ class DatoReparto(models.Model):
     DNI = models.CharField(('DNI'), max_length=9, blank = True, null = True)
     incidencias = models.CharField(('INCIDENCIAS'), max_length=200,  blank = True, null = True)
     fecha_registro = models.DateTimeField(blank=True, null=True)
+    usuario_registro = models.CharField(('USUARIO'), max_length=100, blank = True, null = True)
 
     class Meta:
         permissions = (('can_download_data', 'Can download data.'),

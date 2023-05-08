@@ -41,6 +41,14 @@ def subir_datos(request):
         file = request.FILES
         if file['archivo'].name.split('.')[-1] in ('xlsx','xls'):
             file = pd.read_excel(file['archivo'])
+
+            columnas_preestablecidas = ['CITA','CÓDIGO POSTAL','DIRECCIÓN','NHC','MÓVIL','AGENDA','ESTADO']
+            if any([columna not in file.columns for columna in columnas_preestablecidas]):
+                form = FormularioSubirDocumento()
+
+                messages.error(request,"El archivo no tiene las columnas que debe contener. Por favor, revisa el documento que intenta subir.")
+
+                return render(request, "FARMAHOME/subir_documento.html", {"form":form})
             #file.rename({
                         #'CITA':'dia_cita',
                         #'CÓDIGO POSTAL':'cp',
@@ -66,6 +74,7 @@ def subir_datos(request):
         elif file['archivo'].name.split('.')[-1] == 'csv':
             #file = pd.read_csv(file['archivo'])
             pass
+
         else:
             #return render(request, "FARMAHOME/index.html", {})
             pass
@@ -95,6 +104,7 @@ def entregar_pedido(request,id=None):
                 entrega.estado = request.POST.get('estado', False)
                 entrega.fecha_registro = datetime.now()
                 entrega.incidencias = request.POST.get('incidencias', None)
+                entrega.usuario_registro = request.user.username
 
                 entrega.save()
                 return HttpResponseRedirect('/')
@@ -114,6 +124,7 @@ def entregar_pedido(request,id=None):
                 entrega.estado = request.POST.get('estado', False)
                 entrega.fecha_registro = datetime.now()
                 entrega.incidencias = request.POST.get('incidencias', None)
+                entrega.usuario_registro = request.user.username
 
                 entrega.save()
                 return HttpResponseRedirect('/')
@@ -135,12 +146,12 @@ def exportar_excel(request):
 
     font_style.font.bold = True
     row_num = 0
-    columns = ['CITA', 'CÓDIGO POSTAL', 'DIRECCIÓN', 'NHC', 'MÓVIL', 'AGENDA', 'ESTADO', 'DNI', 'INCIDENCIAS', 'FECHA ENTREGA']
+    columns = ['CITA', 'CÓDIGO POSTAL', 'DIRECCIÓN', 'NHC', 'MÓVIL', 'AGENDA', 'ESTADO', 'DNI', 'INCIDENCIAS', 'FECHA ENTREGA', 'USUARIO REGISTRO']
     for col_num in range(len(columns)):
         work_sheet.write(row_num, col_num, columns[col_num], font_style)
 
     font_style = xlwt.XFStyle()
-    rows = DatoReparto.objects.filter(dia_cita__date=timezone.now().date()).values_list('dia_cita', 'cp', 'direccion', 'nhc', 'movil', 'agenda', 'estado', 'DNI', 'incidencias', 'fecha_registro')
+    rows = DatoReparto.objects.filter(dia_cita__date=timezone.now().date()).values_list('dia_cita', 'cp', 'direccion', 'nhc', 'movil', 'agenda', 'estado', 'DNI', 'incidencias', 'fecha_registro', 'usuario_registro')
     for row in rows:
         row_num += 1
         for col_num in range(len(row)):
