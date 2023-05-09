@@ -13,6 +13,6 @@ Aplicación de seguimiento de medicamentos a domicilio
       <a class="button button1" href="{% url 'FARMAHOME:entregar_pedido' %}">Entregar pedidos</a>
     </div>
     <div>
-      <a class="button button1" href="{% url 'FARMAHOME:ver_pedidos' %}">Ver pedidos</a>
+      <a class="button button1" href="{% url 'FARMAHOME:ver_pedidos' 'hoy' %}">Ver pedidos</a>
     </div>
 {% endblock %}

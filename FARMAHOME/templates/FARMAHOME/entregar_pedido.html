@@ -1,7 +1,7 @@
 {% extends "FARMAHOME/basic.html" %}
 
 {% block subbotton %}
-<a class="home" href="{% url 'FARMAHOME:ver_pedidos' %}">Ver pedidos</a>
+<a class="home" href="{% url 'FARMAHOME:ver_pedidos' 'hoy' %}">Ver pedidos</a>
 {% endblock %}
 
 {% block subtitle %}Entregar pedidos{% endblock %}

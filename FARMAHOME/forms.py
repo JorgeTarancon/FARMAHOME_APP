@@ -38,3 +38,11 @@ class FormularioSubirDocumento(forms.Form):
     documento = forms.FileField(
                                 label = 'Documento',
                                 required = True)
+
+class FormularioBusquedaEntregas(forms.Form):
+    class DateInput(forms.DateInput):
+        input_type = 'date'
+        
+    fecha = forms.DateField(widget=DateInput,
+                            label='Otra fecha',
+                            initial=datetime.date.today())

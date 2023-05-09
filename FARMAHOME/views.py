@@ -6,8 +6,8 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
 from .models import DatoReparto
-from .forms import FormularioEntregarPedido, FormularioSubirDocumento
-from datetime import datetime
+from .forms import FormularioEntregarPedido, FormularioSubirDocumento, FormularioBusquedaEntregas
+from datetime import datetime, timedelta
 import pandas as pd
 import xlwt
 #from sqlalchemy import create_engine
@@ -86,9 +86,27 @@ def subir_datos(request):
         return render(request, "FARMAHOME/subir_documento.html", {"form":form})
 
 @login_required
-def ver_pedidos(request):
-    todos_pedidos = DatoReparto.objects.filter(fecha_cita__date=timezone.now().date())
-    return render(request, "FARMAHOME/ver_pedidos.html", {'todos_pedidos':todos_pedidos} )
+def ver_pedidos(request,fecha=timezone.now().date()):
+    if request.method == 'POST':
+        form = FormularioBusquedaEntregas(request.POST)
+        if form.is_valid():
+            fecha = request.POST.get('fecha', False)
+            fecha_busqueda = datetime.strptime(fecha,'%Y-%m-%d').date()
+    else:
+        if fecha == 'hoy':
+            fecha_busqueda = timezone.now().date()
+        elif fecha == 'ayer': fecha_busqueda = timezone.now().date() - timedelta(days=1)
+        else: fecha_busqueda = fecha
+        form = FormularioBusquedaEntregas(initial={'fecha':fecha_busqueda})
+    
+    todos_pedidos = DatoReparto.objects.filter(fecha_cita__date=fecha_busqueda)
+
+    context = {'todos_pedidos': todos_pedidos,
+               'fecha_actual': timezone.now().date(),
+               'fecha_busqueda':fecha_busqueda.strftime('%d-%m-%Y'),
+               'form':form}
+
+    return render(request, "FARMAHOME/ver_pedidos.html", context=context )
 
 @login_required
 @permission_required(perm='FARMAHOME.can_register_data', raise_exception=True)
@@ -135,9 +153,8 @@ def entregar_pedido(request,id=None):
 
 @login_required
 @permission_required(perm='FARMAHOME.can_download_data', raise_exception=True)
-def exportar_excel(request):
+def exportar_excel(request,fecha=None):
     response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = f'attachment; filename= FARMAHOME_{timezone.now().year}_{timezone.now().month}_{timezone.now().day}.xls'
 
     work_book = xlwt.Workbook(encoding='utf-8')
     work_sheet = work_book.add_sheet('Datos')
@@ -151,7 +168,11 @@ def exportar_excel(request):
         work_sheet.write(row_num, col_num, columns[col_num], font_style)
 
     font_style = xlwt.XFStyle()
-    rows = DatoReparto.objects.filter(fecha_cita__date=timezone.now().date()).values_list('fecha_cita', 'codigo_postal', 'direccion', 'nhc', 'movil', 'agenda_cita', 'estado_entrega', 'DNI', 'incidencias', 'fecha_registro', 'usuario_registro')
+
+    fecha_descarga = datetime.strptime(fecha, '%d-%m-%Y').date()
+    response['Content-Disposition'] = f'attachment; filename= FARMAHOME_{fecha_descarga.year}_{fecha_descarga.month}_{fecha_descarga.day}.xls'
+    rows = DatoReparto.objects.filter(fecha_cita__date=fecha_descarga).values_list('fecha_cita', 'codigo_postal', 'direccion', 'nhc', 'movil', 'agenda_cita', 'estado_entrega', 'DNI', 'incidencias', 'fecha_registro', 'usuario_registro')
+
     for row in rows:
         row_num += 1
         for col_num in range(len(row)):

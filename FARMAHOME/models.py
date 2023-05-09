@@ -1,12 +1,12 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+#from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
 class DatoReparto(models.Model):
     
     def __str__(self):
-        return f'Repartir en: {self.direccion}\nEn el CP: {self.cp}\nMovil: {self.movil}'
+        return f'Repartir en: {self.direccion}\nEn el CP: {self.codigo_postal}\nMovil: {self.movil}'
     
     fecha_cita = models.DateTimeField(('CITA'))
     codigo_postal = models.PositiveBigIntegerField(('CÓDIGO POSTAL'))
