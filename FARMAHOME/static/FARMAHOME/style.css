@@ -1,131 +1,99 @@
-.body{
-    background-color:rgba(233, 231, 231, 0.951);
-}
+/* CONTAINERS */
+.container_login {
+    border-radius: 5px;
+    padding: 50px;
+  }
 
-p{
-    font-size:20px
-}
-
-.header {
-position: relative;
-height: 100%;
-color: #ffffff;
-padding: 10px;
-background-color: rgb(98, 114, 157);
-margin-bottom:40px;
+.container-fluid {
+    padding:4%;
 }
 
 .menu_container {
-    padding: 10px;
+    padding: 15px;
     background: white;
     width: fit-content;
     height: fit-content;
     border-radius: 15px; 
     border: 1.5px solid  #c2c2c2;
     box-shadow: 10px 10px 5px lightgray;
+  }
+
+.button_container {
+    padding: 1%
 }
 
-.home_div {
-    position: relative;
-    height: 100%;
-    color: #ffffff;
-    padding: 10px;
-    background-color: rgb(98, 114, 157);
-    }
-
-.home {
-    background-color: #6c7799;
-    color: white;
-    padding: 2px 2px;
-    text-align: center;
-    text-decoration: none;
-    display: inline;
-    font-size: 15px;
-    cursor: pointer;
-    border: 2px solid black;
-    border-radius: 8px;
-}
-
-.edit_button {
-    background-color: rgb(211, 223, 240);
-    border: 4px solid  #909dc3;
-    color: black;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 10px;
-    
-}
-
-.button {
-    background-color: rgb(211, 223, 240);
-    border: none;
-    color: white;
-    padding: 30px 64px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 30px;
-    margin: 4px 2px;
-    cursor: pointer;
-}
-
-.button_submit {
-    background-color: #4CAF50; /* Green */
-    border: none;
-    color: white;
-    padding: 10px 10px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 20px;
-    margin: 2px 1px;
-    cursor: pointer;
-    }
-
-.button1 {
-    background-color: rgb(211, 223, 240);
-    color: black; 
-    border: 5px solid  #909dc3;
-    border-radius: 15px;
-    width: 250px;
-}
-
-.button2 {
-    background-color: rgb(211, 223, 240); 
-    color: black; 
-    border: 5px solid  #909dc3;
-    padding: 10px 10px;
-    border-radius: 15px;
-    border: 4px solid  #909dc3;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    cursor: pointer;
-    }
+.menu_tittle_container {
+    padding: 0;
+    margin-bottom: 15px;
+    border-bottom: 1.5px solid #c2c2c2;
+  }
 
 .container {
     border-radius: 5px;
     background-color: rgb(211, 223, 240);
     padding: 50px;
   }
-  
-.container input[type=text], select, textarea {
-width: 100%;
-padding: 12px;
-border: 1px solid #ccc;
-border-radius: 4px;
-resize: vertical;
+/* CONTAINERS */
+
+/* NAVBAR */
+.navbar.navbar-expand-lg{
+    background-color: rgb(98, 114, 157);
+    padding: 0;
 }
 
-.container_login {
-    border-radius: 5px;
-    background-color: rgb(211, 223, 240);
-    padding: 50px;
-  }
+a.navbar-brand.ms-auto {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: 'Times New Roman', Times, serif;
+}
 
+.navbar-nav.mr-auto a.nav-link.active {
+    color: white;
+}
+
+.navbar-nav.ms-auto a.nav-link.active {
+    color: white;
+}
+/* NAVBAR */
+
+/* BUTTONS */
+.btn.btn-primary.menu {
+    background-color: rgb(211, 223, 240); 
+    color: black; 
+    border: 5px solid  #909dc3;
+    border-radius: 15px;
+    width: 250px;
+    padding: 10px;
+    font-size: x-large;
+}
+
+.btn.btn-primary.btn-sm{
+    background-color: rgb(98, 114, 157);
+    border-color: rgb(98, 114, 157);
+    margin: 0.2%;
+}
+/* BUTTONS */
+
+
+/* DIVS */
+.div_padding_2{
+    padding: 2%;
+}
+/* DIVS */
+
+
+/* INPUTS */
+.container-fluid input[type=text], select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+}
+/* INPUTS */
+
+/* TABLES */
 .styled-table {
     border-collapse: collapse;
     margin: 25px 0;
@@ -149,6 +117,7 @@ resize: vertical;
 .styled-table tbody tr {
     border-bottom: 1px solid #dddddd;
 }
+
 .styled-table tbody tr:nth-of-type(even) {
     background-color: #f3f3f3;
 }
@@ -160,15 +129,15 @@ resize: vertical;
 .styled-table tbody tr.active-row {
     color:black;
 }
+/* TABLES */
 
-#username {
-    color:black;
-}
-
-.messages {
-    padding: 10px;
-    background-color: #f44336; /* Red */
+/* OTHERS */
+.w-100.p-3.subtitulo {
+    background-color: rgb(98, 114, 157);
     color: white;
-    margin-bottom: 15px;
-    list-style-type: none
+    font-size: 12px;
+    font-weight: bold;
+    align-items: center;
+    text-align: center;
 }
+/* OTHERS */

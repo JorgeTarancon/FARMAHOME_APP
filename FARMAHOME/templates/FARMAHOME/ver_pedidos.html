@@ -7,12 +7,12 @@ Ver pedidos ({{ fecha_busqueda }})
 {% block body %}
 
 <div>
-    <a class="home" href="{% url 'FARMAHOME:ver_pedidos' 'ayer' %}">Ayer</a>
-    <a class="home" href="{% url 'FARMAHOME:ver_pedidos' 'hoy' %}">Hoy</a>
+    <a class="btn btn-primary btn-sm" href="{% url 'FARMAHOME:ver_pedidos' 'ayer' %}">Ayer</a>
+    <a class="btn btn-primary btn-sm" href="{% url 'FARMAHOME:ver_pedidos' 'hoy' %}">Hoy</a>
     <form action="" method='POST'>
         {% csrf_token %}
         {{ form.as_p }}
-        <button class="home" type="submit"> Buscar </button>
+        <button class="btn btn-primary btn-sm" type="submit"> Buscar </button>
     </form>
 </div>
 
@@ -35,7 +35,7 @@ Ver pedidos ({{ fecha_busqueda }})
             <td>{{ results.estado_entrega }}</td>
             <td>{{ results.fecha_registro}}</td>
             {% if results.fecha_registro is null and results.fecha_cita.day == fecha_actual.day and results.fecha_cita.month == fecha_actual.month and results.fecha_cita.year == fecha_actual.year %}
-                <td><div><a class="edit_button" href="{% url 'FARMAHOME:editar_pedido' results.id %}">Editar</a></div>
+                <td><div><a class="btn btn-primary btn-sm" href="{% url 'FARMAHOME:editar_pedido' results.id %}">Editar</a></div>
             {% endif %}
         </tr>
     </tbody>
@@ -44,6 +44,6 @@ Ver pedidos ({{ fecha_busqueda }})
 </table>
     </center>
 <div class="col-md-4">
-    <a class="button button2" href="{% url 'FARMAHOME:exportar_excel' fecha_busqueda %}">Descargar</a>
+    <a class="btn btn-primary btn-lg btn-block" href="{% url 'FARMAHOME:exportar_excel' fecha_busqueda %}">Descargar</a>
 </div>
 {% endblock %}

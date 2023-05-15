@@ -5,14 +5,17 @@ Aplicación de seguimiento de medicamentos a domicilio
 {% endblock %}
 
 {% block body %}
-  <div class="menu_container">
-	<div>
-      <a class="button button1" href="{% url 'FARMAHOME:subir_datos' %}">Subir documento</a>
+  <div class="container-fluid">
+    <div class="menu_container">
+      <div class="button_container">
+        <a class="btn btn-primary menu" href="{% url 'FARMAHOME:subir_datos' %}">Subir documento</a>
+      </div>
+      <div class="button_container">
+        <a class="btn btn-primary menu" href="{% url 'FARMAHOME:entregar_pedido' %}">Entregar pedidos</a>
+      </div>
+      <div class="button_container">
+        <a class="btn btn-primary menu" href="{% url 'FARMAHOME:ver_pedidos' 'hoy' %}">Ver pedidos</a>
+      </div>
     </div>
-    <div>
-      <a class="button button1" href="{% url 'FARMAHOME:entregar_pedido' %}">Entregar pedidos</a>
-    </div>
-    <div>
-      <a class="button button1" href="{% url 'FARMAHOME:ver_pedidos' 'hoy' %}">Ver pedidos</a>
-    </div>
+  </div>
 {% endblock %}
