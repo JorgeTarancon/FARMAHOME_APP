@@ -8,6 +8,16 @@
     padding:4%;
 }
 
+.container-fluid .container {
+    border-radius: 5px;
+    background-color: rgb(211, 223, 240);
+    padding: 50px;
+  }
+
+.container {
+    padding: 2px;
+}
+
 .menu_container {
     padding: 15px;
     background: white;
@@ -26,12 +36,6 @@
     padding: 0;
     margin-bottom: 15px;
     border-bottom: 1.5px solid #c2c2c2;
-  }
-
-.container {
-    border-radius: 5px;
-    background-color: rgb(211, 223, 240);
-    padding: 50px;
   }
 /* CONTAINERS */
 
