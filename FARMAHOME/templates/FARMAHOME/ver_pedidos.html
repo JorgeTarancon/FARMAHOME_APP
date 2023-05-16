@@ -24,34 +24,50 @@ Ver pedidos ({{ fecha_busqueda }})
     </div>
 </div>
 
-<table class = "styled-table" >
-    <thead>
+<div class="container">
+    <table class="table table-striped">
+
+      <thead>
         <tr>
-        <th scope="col">DIRECCIÓN</th>
-        <th scope="col">CP</th>
-        <th scope="col">ESTADO</th>
-        <th scope="col">FECHA REGISTRO</th>
-        <th scope="col"></th>
+            <th class="col-md-6">DIRECCIÓN</th>
+            <th class="col-md-1">CP</th>
+            <th class="col-md-2">ESTADO</th>
+            <th class="col-md-2">FECHA REGISTRO</th>
+            <th class="col-md-1"></th>
         </tr>
-    </thead>
+      </thead>
 
-    <tbody>
+      <tbody>
         {% for results in todos_pedidos %}
-        <tr class="active-row">
-            <td>{{ results.direccion }}</td>
-            <td>{{ results.codigo_postal }}</td>
-            <td>{{ results.estado_entrega }}</td>
-            <td>{{ results.fecha_registro}}</td>
-            {% if results.fecha_registro is null and results.fecha_cita.day == fecha_actual.day and results.fecha_cita.month == fecha_actual.month and results.fecha_cita.year == fecha_actual.year %}
-                <td><div><a class="btn btn-primary btn-sm" href="{% url 'FARMAHOME:editar_pedido' results.id %}">Editar</a></div>
-            {% endif %}
-        </tr>
-    </tbody>
+            <tr>
+                <td>{{ results.direccion }}</td>
+                <td>{{ results.codigo_postal }}</td>
+                <td>{{ results.estado_entrega }}</td>
+                <td>{{ results.fecha_registro }}</td>
+                {% if results.fecha_registro is null and results.fecha_cita.day == fecha_actual.day and results.fecha_cita.month == fecha_actual.month and results.fecha_cita.year == fecha_actual.year %}
+                    <td>
+                        <div>
+                            <a class="btn btn-primary btn-sm" href="{% url 'FARMAHOME:editar_pedido' results.id %}">Editar</a>
+                        </div>
+                    </td>
+                {% else %}
+                    <td>
+                        <div>
+                            <a class="btn btn-primary btn-sm disabled">Editar</a>
+                        </div>
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+      </tbody>
 
-{% endfor %}
-</table>
-    </center>
+    </table>
+</div>
+
+</center>
+
 <div class="col-md-4">
     <a class="btn btn-primary btn-lg btn-block" href="{% url 'FARMAHOME:exportar_excel' fecha_busqueda %}">Descargar</a>
 </div>
+
 {% endblock %}
