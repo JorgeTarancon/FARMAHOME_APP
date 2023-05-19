@@ -25,10 +25,9 @@ class FormularioEntregarPedido(forms.Form):
                                 label = 'Estado de la entrega')
     
     dni = forms.CharField(
-                            min_length = 9,
-                            max_length = 9,
+                            max_length = 15,
                             required = True,
-                            label = 'DNI')
+                            label = 'DNI o nombre')
     
     incidencias = forms.CharField(
                                     max_length = 200,
