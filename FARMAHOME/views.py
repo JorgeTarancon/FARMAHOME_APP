@@ -65,7 +65,7 @@ def subir_datos(request):
                     nhc = file.loc[index,'NHC'],
                     movil = file.loc[index,'MÓVIL'],
                     agenda_cita = file.loc[index,'AGENDA'],
-                    estado_entrega = file.loc[index,'ESTADO']
+                    estado_entrega = 'Pendiente'
                 )
                 new_value.save()
             
