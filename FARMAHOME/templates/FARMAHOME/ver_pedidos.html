@@ -44,7 +44,7 @@ Ver pedidos ({{ fecha_busqueda }})
                 <td>{{ results.codigo_postal }}</td>
                 <td>{{ results.estado_entrega }}</td>
                 <td>{{ results.fecha_registro }}</td>
-                {% if results.fecha_registro is null and results.fecha_cita.day == fecha_actual.day and results.fecha_cita.month == fecha_actual.month and results.fecha_cita.year == fecha_actual.year %}
+                {% if results.fecha_registro is null and results.fecha_cita.day == fecha_actual.day and results.fecha_cita.month == fecha_actual.month and results.fecha_cita.year == fecha_actual.year and perms.FARMAHOME.can_register_data %}
                     <td>
                         <div>
                             <a class="btn btn-primary btn-sm" href="{% url 'FARMAHOME:editar_pedido' results.id %}">Editar</a>
