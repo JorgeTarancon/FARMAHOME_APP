@@ -39,26 +39,24 @@ def index(request):
 def subir_datos(request):
     if request.method == 'POST':
         file = request.FILES
-        if file['archivo'].name.split('.')[-1] in ('xlsx','xls'):
+        if len(file.keys()) == 0:
+            messages.error(request,"You have not attached any files. Please attach a file before clicking upload.")
+
+            form = FormularioSubirDocumento()
+
+            return render(request, "FARMAHOME/subir_documento.html", {"form":form})
+
+        elif file['archivo'].name.split('.')[-1] in ('xlsx','xls'):
             file = pd.read_excel(file['archivo'])
 
             columnas_preestablecidas = ['CITA','CÓDIGO POSTAL','DIRECCIÓN','NHC','MÓVIL','AGENDA','ESTADO']
             if any([columna not in file.columns for columna in columnas_preestablecidas]):
                 form = FormularioSubirDocumento()
 
-                messages.error(request,"El archivo no tiene las columnas que debe contener. Por favor, revisa el documento que intenta subir.")
+                messages.error(request,"The file does not contain the columns it should contain. Please, check the file you are trying to upload.")
 
                 return render(request, "FARMAHOME/subir_documento.html", {"form":form})
-            #file.rename({
-                        #'CITA':'fecha_cita',
-                        #'CÓDIGO POSTAL':'codigo_postal',
-                        #'DIRECCIÓN':'direccion',
-                        #'NHC':'nhc',
-                        #'MÓVIL':'movil',
-                        #'AGENDA':'agenda_cita',
-                        #'ESTADO':'estado_entrega'}, axis='columns', inplace=True)
-            #engine = create_engine('sqlite:///db.sqlite3')
-            #file.to_sql('FARMAHOME_datoreparto', index=False, if_exists='append', con=engine)
+            
             for index in file.index:
                 new_value = DatoReparto(
                     fecha_cita = file.loc[index,'CITA'],
@@ -71,15 +69,14 @@ def subir_datos(request):
                 )
                 new_value.save()
             
-        elif file['archivo'].name.split('.')[-1] == 'csv':
-            #file = pd.read_csv(file['archivo'])
-            pass
+            return render(request, "FARMAHOME/index.html", {})
 
         else:
-            #return render(request, "FARMAHOME/index.html", {})
-            pass
+            messages.error(request,"The file format is not valid. Please upload an .xlsx or .xls file.")
+            form = FormularioSubirDocumento()
 
-        return render(request, "FARMAHOME/index.html", {})
+            return render(request, "FARMAHOME/subir_documento.html", {"form":form})
+
     else:
         form = FormularioSubirDocumento()
 
