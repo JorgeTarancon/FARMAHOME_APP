@@ -4,14 +4,15 @@ import datetime
         
 class FormularioEntregarPedido(forms.Form):
     ESTADOS = (
-                ("Sin revisar", "Sin revisar"),
+                ("Pendiente", "Pendiente"),
                 ("Entregado en domicilio", "Entregado en domicilio"),
                 ("Entregado en otra dirección", "Entregado en otra dirección"),
                 ("No entregado: Direccion errónea", "No entregado: Direccion errónea"),
                 ("No entregado: No hay nadie en casa", "No entregado: No hay nadie en casa"),
+                ("Cancelada entrega en domicilio","Cancelada entrega en domicilio"),
             )
 
-    direccion = forms.ModelChoiceField(queryset = DatoReparto.objects.filter(estado_entrega='Sin revisar', fecha_cita__date=datetime.date.today())\
+    direccion = forms.ModelChoiceField(queryset = DatoReparto.objects.filter(estado_entrega='Pendiente', fecha_cita__date=datetime.date.today())\
                                                                         .values_list('direccion', flat=True),
                                        #empty_label = None,
                                        required = True,
