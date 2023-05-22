@@ -5,25 +5,38 @@ Aplicación de seguimiento de medicamentos a domicilio
 {% endblock %}
 
 {% block body %}
-  <div class="container-fluid">
-    <div class="menu_container">
-      <div class="button_container">
-        {% if perms.FARMAHOME.can_upload_data %}
-        	<a class="btn btn-primary menu" href="{% url 'FARMAHOME:subir_datos' %}">Subir documento</a>
-        {% else %}
-			<a class="btn btn-primary menu disabled" href="{% url 'FARMAHOME:subir_datos' %}">Subir documento</a>
-        {% endif %}
-      </div>
-      <div class="button_container">
-		{% if perms.FARMAHOME.can_register_data %}
-        	<a class="btn btn-primary menu" href="{% url 'FARMAHOME:entregar_pedido' %}">Gestión de entregas</a>
-		{% else %}
-			<a class="btn btn-primary menu disabled" href="{% url 'FARMAHOME:entregar_pedido' %}">Gestión de entregas</a>
+	<div class="container-fluid">
+		<div class="menu_container">
+
+			{% if perms.FARMAHOME.can_upload_data %}
+				<div class="button_container">
+					<a class="btn btn-primary menu" href="{% url 'FARMAHOME:subir_datos' %}">Subir documento</a>
+				</div>
+			{% endif %}
+
+			<div class="button_container">
+				{% if perms.FARMAHOME.can_register_data %}
+					<a class="btn btn-primary menu" href="{% url 'FARMAHOME:entregar_pedido' %}">Gestión de entregas</a>
+				{% else %}
+					<a class="btn btn-primary menu disabled" href="{% url 'FARMAHOME:entregar_pedido' %}">Gestión de entregas</a>
+				{% endif %}
+			</div>
+
+			<div class="button_container">
+				<a class="btn btn-primary menu" href="{% url 'FARMAHOME:ver_pedidos' 'hoy' %}">Ver listado de entregas</a>
+			</div>
+
+		</div>
+
+		{% if perms.FARMAHOME.can_register_route %}
+			<div class="div_margin_top_1">
+				<form method="post">
+					{% csrf_token %}
+					<button class="btn btn-primary" type="submit" name="inicio_ruta"> Inicio ruta </button>
+					<button class="btn btn-primary" type="submit" name="fin_ruta"> Fin ruta </button>
+				</form>
+			</div>
 		{% endif %}
-      </div>
-      <div class="button_container">
-        <a class="btn btn-primary menu" href="{% url 'FARMAHOME:ver_pedidos' 'hoy' %}">Ver listado de entregas</a>
-      </div>
-    </div>
-  </div>
+
+  	</div>
 {% endblock %}

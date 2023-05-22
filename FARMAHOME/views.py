@@ -5,7 +5,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
-from .models import DatoReparto
+from .models import DatoReparto, Ruta
 from .forms import FormularioEntregarPedido, FormularioSubirDocumento, FormularioBusquedaEntregas
 from datetime import datetime, timedelta
 import pandas as pd
@@ -31,6 +31,39 @@ def user_login(request):
 
 @login_required
 def index(request):
+    if request.method == "POST":
+
+        ruta = Ruta.objects.filter(usuario=request.user.username, fecha_inicio__date=timezone.now().date())
+
+        if 'inicio_ruta' in request.POST:
+            if len(ruta) == 0:
+                new_value = Ruta(
+                        usuario = request.user.username,
+                        fecha_inicio = datetime.now())
+                new_value.save()
+
+                messages.success(request,"Fecha inicio de la ruta registrada correctamente.")
+            else:
+                messages.warning(request,f"Ya has registrado un inicio de ruta hoy para el usuario: {request.user.username}. No se puede registrar un nuevo inicio.")
+
+        elif 'fin_ruta' in request.POST:
+            if len(ruta) == 0:
+                messages.warning(request,f"No se ha registrado ningún inicio de ruta hoy para el usuario: {request.user.username}. Por lo tanto, no se puede finalizar la ruta.")
+            else:
+                if ruta[0].fecha_fin:
+                    messages.warning(request,f"Ya has registrado un fin de ruta hoy para el usuario: {request.user.username}. No se puede registrar un nuevo final.")
+                else:
+                    ruta[0].fecha_fin = datetime.now()
+                    ruta[0].save()
+
+                    messages.success(request,"Fecha fin de la ruta registrada correctamente.")
+
+        else:
+            messages.error(request,"An error has ocurred and we have not been able to register the datetime.")
+            
+    else:
+        pass
+
     context = {}
     return render(request, "FARMAHOME/index.html", context)
 
@@ -146,7 +179,7 @@ def entregar_pedido(request,id=None):
         else:
             form = FormularioEntregarPedido()
 
-        return render(request, "FARMAHOME/entregar_pedido.html", {"form":form})    
+        return render(request, "FARMAHOME/entregar_pedido.html", {"form":form})
 
 @login_required
 @permission_required(perm='FARMAHOME.can_download_data', raise_exception=True)

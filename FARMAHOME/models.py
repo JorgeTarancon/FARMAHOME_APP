@@ -24,3 +24,11 @@ class DatoReparto(models.Model):
         permissions = (('can_download_data', 'Can download data.'),
                        ('can_upload_data','Can upload data.'),
                        ('can_register_data','Can register data.'),)
+        
+class Ruta(models.Model):
+    usuario = models.CharField(('USUARIO'), max_length=150, blank=False, null=False)
+    fecha_inicio = models.DateTimeField(('FECHA_INICIO'), blank=False, null=False)
+    fecha_fin = models.DateTimeField(('FECHA_FIN'), blank=False, null=True)
+    
+    class Meta:
+        permissions = (('can_register_route','Can register route.'),)
