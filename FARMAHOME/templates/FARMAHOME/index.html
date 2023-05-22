@@ -29,7 +29,7 @@ Aplicación de seguimiento de medicamentos a domicilio
 		</div>
 
 		{% if perms.FARMAHOME.can_register_route %}
-			<div class="div_margin_top_1">
+			<div class="div_margin_top_4">
 				<form method="post">
 					{% csrf_token %}
 					<button class="btn btn-primary" type="submit" name="inicio_ruta"> Inicio ruta </button>
