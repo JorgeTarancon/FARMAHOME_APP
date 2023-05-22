@@ -54,16 +54,10 @@ def index(request):
                 if ruta[0].fecha_fin:
                     messages.warning(request,f"Ya has registrado un fin de ruta hoy para el usuario: {request.user.username}. No se puede registrar un nuevo final.")
                 else:
-                    pedidos_pendientes = DatoReparto.objects.filter(fecha_cita__date=timezone.now().date(), estado_entrega = 'Pendiente')
-                    if len(pedidos_pendientes) != 0:
-                        print(pedidos_pendientes)
-                        print(len(pedidos_pendientes))
-                        messages.warning(request,'Todavia quedan entregas con estado "Pendiente". No se puede finalizar la ruta si quedan entregas pendientes.')
-                    else:
-                        ruta[0].fecha_fin = fecha
-                        ruta[0].save()
+                    ruta[0].fecha_fin = fecha
+                    ruta[0].save()
 
-                        messages.success(request,f"Fecha fin de la ruta registrada correctamente: {datetime.strftime(fecha,'%d-%m-%Y %H:%M:%S')}")
+                    messages.success(request,f"Fecha fin de la ruta registrada correctamente: {datetime.strftime(fecha,'%d-%m-%Y %H:%M:%S')}")
 
         else:
             messages.error(request,"An error has ocurred and we have not been able to register the datetime.")
@@ -71,7 +65,9 @@ def index(request):
     else:
         pass
 
-    context = {}
+    pedidos_pendientes = DatoReparto.objects.filter(fecha_cita__date=timezone.now().date(), estado_entrega = 'Pendiente')
+
+    context = {'n_pedidos_pendientes':len(pedidos_pendientes)}
     return render(request, "FARMAHOME/index.html", context)
 
 @login_required

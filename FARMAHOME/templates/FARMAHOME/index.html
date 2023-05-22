@@ -33,10 +33,36 @@ Aplicación de seguimiento de medicamentos a domicilio
 				<form method="post">
 					{% csrf_token %}
 					<button class="btn btn-primary" type="submit" name="inicio_ruta"> Inicio ruta </button>
-					<button class="btn btn-primary" type="submit" name="fin_ruta"> Fin ruta </button>
+					{% if n_pedidos_pendientes %}
+						<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmFinRuta"> Fin Ruta </button>
+					{% else %}
+						<button class="btn btn-primary" type="submit" name="fin_ruta"> Fin ruta </button>
+					{% endif %}
 				</form>
 			</div>
 		{% endif %}
-
   	</div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="confirmFinRuta" tabindex="-1" aria-labelledby="confirmFinRutaLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title" id="confirmFinRutaLabel"> ¿Seguro que desea finalizar la ruta? </h5>
+			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		</div>
+		<div class="modal-body">
+			Existen {{ n_pedidos_pendientes }} pedidos con estado de entrega "Pendiente". ¿Aún así quiere finalizar la ruta?
+		</div>
+		<div class="modal-footer">
+			<form method="post">
+				{% csrf_token %}
+				<button class="btn btn-primary" type="submit" name="fin_ruta">Sí, finalizar ruta</button>
+				<button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
+			</form>
+		</div>
+		</div>
+	</div>
+	</div>
+
 {% endblock %}
