@@ -34,15 +34,16 @@ def index(request):
     if request.method == "POST":
 
         ruta = Ruta.objects.filter(usuario=request.user.username, fecha_inicio__date=timezone.now().date())
+        fecha = datetime.now()
 
         if 'inicio_ruta' in request.POST:
             if len(ruta) == 0:
                 new_value = Ruta(
                         usuario = request.user.username,
-                        fecha_inicio = datetime.now())
+                        fecha_inicio = fecha)
                 new_value.save()
 
-                messages.success(request,"Fecha inicio de la ruta registrada correctamente.")
+                messages.success(request,f"Fecha inicio de la ruta registrada correctamente: {datetime.strftime(fecha,'%d-%m-%Y %H:%M:%S')}")
             else:
                 messages.warning(request,f"Ya has registrado un inicio de ruta hoy para el usuario: {request.user.username}. No se puede registrar un nuevo inicio.")
 
@@ -53,10 +54,16 @@ def index(request):
                 if ruta[0].fecha_fin:
                     messages.warning(request,f"Ya has registrado un fin de ruta hoy para el usuario: {request.user.username}. No se puede registrar un nuevo final.")
                 else:
-                    ruta[0].fecha_fin = datetime.now()
-                    ruta[0].save()
+                    pedidos_pendientes = DatoReparto.objects.filter(fecha_cita__date=timezone.now().date(), estado_entrega = 'Pendiente')
+                    if len(pedidos_pendientes) != 0:
+                        print(pedidos_pendientes)
+                        print(len(pedidos_pendientes))
+                        messages.warning(request,'Todavia quedan entregas con estado "Pendiente". No se puede finalizar la ruta si quedan entregas pendientes.')
+                    else:
+                        ruta[0].fecha_fin = fecha
+                        ruta[0].save()
 
-                    messages.success(request,"Fecha fin de la ruta registrada correctamente.")
+                        messages.success(request,f"Fecha fin de la ruta registrada correctamente: {datetime.strftime(fecha,'%d-%m-%Y %H:%M:%S')}")
 
         else:
             messages.error(request,"An error has ocurred and we have not been able to register the datetime.")
