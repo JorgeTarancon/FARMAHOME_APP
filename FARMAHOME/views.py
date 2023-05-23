@@ -33,10 +33,10 @@ def user_login(request):
 def index(request):
     if request.method == "POST":
 
-        ruta = Ruta.objects.filter(usuario=request.user.username, fecha_inicio__date=timezone.now().date())
-        fecha = datetime.now()
-
         if 'inicio_ruta' in request.POST:
+            ruta = Ruta.objects.filter(usuario=request.user.username, fecha_inicio__date=timezone.now().date())
+            fecha = datetime.now()
+
             if len(ruta) == 0:
                 new_value = Ruta(
                         usuario = request.user.username,
@@ -45,19 +45,30 @@ def index(request):
 
                 messages.success(request,f"Fecha inicio de la ruta registrada correctamente: {datetime.strftime(fecha,'%d-%m-%Y %H:%M:%S')}")
             else:
-                messages.warning(request,f"Ya has registrado un inicio de ruta hoy para el usuario: {request.user.username}. No se puede registrar un nuevo inicio.")
+                ruta_fecha_fin_null = Ruta.objects.filter(usuario=request.user.username,
+                                                          fecha_inicio__date=timezone.now().date(),
+                                                          fecha_fin__isnull=True)
+                if len(ruta_fecha_fin_null) == 0:
+                    new_value = Ruta(
+                        usuario = request.user.username,
+                        fecha_inicio = fecha)
+                    new_value.save()
+
+                    messages.success(request,f"Nueva fecha inicio de la ruta registrada correctamente: {datetime.strftime(fecha,'%d-%m-%Y %H:%M:%S')}")
+                else:
+                    messages.warning(request,f"Ya has registrado un inicio de ruta hoy para el usuario: {request.user.username}. No se puede registrar un nuevo inicio sin finalizar el anterior.")
 
         elif 'fin_ruta' in request.POST:
-            if len(ruta) == 0:
-                messages.warning(request,f"No se ha registrado ningún inicio de ruta hoy para el usuario: {request.user.username}. Por lo tanto, no se puede finalizar la ruta.")
-            else:
-                if ruta[0].fecha_fin:
-                    messages.warning(request,f"Ya has registrado un fin de ruta hoy para el usuario: {request.user.username}. No se puede registrar un nuevo final.")
-                else:
-                    ruta[0].fecha_fin = fecha
-                    ruta[0].save()
+            ruta = Ruta.objects.filter(usuario=request.user.username, fecha_inicio__date=timezone.now().date(), fecha_fin__isnull=True)
+            fecha = datetime.now()
 
-                    messages.success(request,f"Fecha fin de la ruta registrada correctamente: {datetime.strftime(fecha,'%d-%m-%Y %H:%M:%S')}")
+            if len(ruta) == 0:
+                messages.warning(request,f"No hay ninguna ruta pendiente de finalizar hoy para el usuario: {request.user.username}. Por lo tanto, no se puede finalizar la ruta.")
+            else:
+                ruta[0].fecha_fin = fecha
+                ruta[0].save()
+
+                messages.success(request,f"Fecha fin de la ruta registrada correctamente: {datetime.strftime(fecha,'%d-%m-%Y %H:%M:%S')}")
 
         else:
             messages.error(request,"An error has ocurred and we have not been able to register the datetime.")
@@ -187,29 +198,45 @@ def entregar_pedido(request,id=None):
 @login_required
 @permission_required(perm='FARMAHOME.can_download_data', raise_exception=True)
 def exportar_excel(request,fecha=None):
+    fecha_descarga = datetime.strptime(fecha, '%d-%m-%Y').date()
+
     response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = f'attachment; filename= FARMAHOME_{fecha_descarga.year}_{fecha_descarga.month}_{fecha_descarga.day}.xls'
 
     work_book = xlwt.Workbook(encoding='utf-8')
-    work_sheet = work_book.add_sheet('Datos')
+
+    work_sheet_entregas = work_book.add_sheet('Entregas') # Entrega pedidos work_sheet
+    work_sheet_route = work_book.add_sheet('Ruta') # Ruta work_sheet
 
     font_style = xlwt.XFStyle()
 
+    # Write headers in both sheets
     font_style.font.bold = True
     row_num = 0
+
     columns = ['CITA', 'CÓDIGO POSTAL', 'DIRECCIÓN', 'NHC', 'MÓVIL', 'AGENDA', 'ESTADO', 'DNI', 'INCIDENCIAS', 'FECHA ENTREGA', 'USUARIO REGISTRO']
     for col_num in range(len(columns)):
-        work_sheet.write(row_num, col_num, columns[col_num], font_style)
+        work_sheet_entregas.write(row_num, col_num, columns[col_num], font_style)
 
+    columns = ['USUARIO','FECHA_INICIO','FECHA_FIN']
+    for col_num in range(len(columns)):
+        work_sheet_route.write(row_num, col_num, columns[col_num], font_style)
+
+    # Write data in both sheets
     font_style = xlwt.XFStyle()
 
-    fecha_descarga = datetime.strptime(fecha, '%d-%m-%Y').date()
-    response['Content-Disposition'] = f'attachment; filename= FARMAHOME_{fecha_descarga.year}_{fecha_descarga.month}_{fecha_descarga.day}.xls'
     rows = DatoReparto.objects.filter(fecha_cita__date=fecha_descarga).values_list('fecha_cita', 'codigo_postal', 'direccion', 'nhc', 'movil', 'agenda_cita', 'estado_entrega', 'DNI', 'incidencias', 'fecha_registro', 'usuario_registro')
-
     for row in rows:
         row_num += 1
         for col_num in range(len(row)):
-            work_sheet.write(row_num, col_num, str(row[col_num]), font_style)
+            work_sheet_entregas.write(row_num, col_num, str(row[col_num]), font_style)
+
+    row_num = 0
+    rows = Ruta.objects.filter(fecha_inicio__date=fecha_descarga).values_list('usuario', 'fecha_inicio', 'fecha_fin')
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            work_sheet_route.write(row_num, col_num, str(row[col_num]), font_style)
 
     work_book.save(response)
 
