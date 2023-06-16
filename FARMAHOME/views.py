@@ -34,7 +34,7 @@ def index(request):
     if request.method == "POST":
 
         if 'inicio_ruta' in request.POST:
-            ruta = Ruta.objects.filter(usuario=request.user.username, fecha_inicio__date=timezone.now().date())
+            ruta = Ruta.objects.filter(fecha_inicio__date=timezone.now().date())
             fecha = datetime.now()
 
             if len(ruta) == 0:
@@ -45,8 +45,7 @@ def index(request):
 
                 messages.success(request,f"Fecha inicio de la ruta registrada correctamente: {datetime.strftime(fecha,'%d-%m-%Y %H:%M:%S')}")
             else:
-                ruta_fecha_fin_null = Ruta.objects.filter(usuario=request.user.username,
-                                                          fecha_inicio__date=timezone.now().date(),
+                ruta_fecha_fin_null = Ruta.objects.filter(fecha_inicio__date=timezone.now().date(),
                                                           fecha_fin__isnull=True)
                 if len(ruta_fecha_fin_null) == 0:
                     new_value = Ruta(
@@ -56,7 +55,7 @@ def index(request):
 
                     messages.success(request,f"Nueva fecha inicio de la ruta registrada correctamente: {datetime.strftime(fecha,'%d-%m-%Y %H:%M:%S')}")
                 else:
-                    messages.warning(request,f"Ya has registrado un inicio de ruta hoy para el usuario: {request.user.username}. No se puede registrar un nuevo inicio sin finalizar el anterior.")
+                    messages.warning(request,f"Ya hay registrado un inicio de ruta hoy para el usuario: {request.user.username}. No se puede registrar un nuevo inicio sin finalizar el anterior.")
 
         elif 'fin_ruta' in request.POST:
             ruta = Ruta.objects.filter(usuario=request.user.username, fecha_inicio__date=timezone.now().date(), fecha_fin__isnull=True)
