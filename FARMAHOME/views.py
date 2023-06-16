@@ -93,16 +93,35 @@ def subir_datos(request):
             return render(request, "FARMAHOME/subir_documento.html", {"form":form})
 
         elif file['archivo'].name.split('.')[-1] in ('xlsx','xls'):
+            today_date = timezone.now().date()
             file = pd.read_excel(file['archivo'])
 
+            # Check if the file has the required columns
             columnas_preestablecidas = ['CITA','CÓDIGO POSTAL','DIRECCIÓN','NHC','MÓVIL','AGENDA','ESTADO']
             if any([columna not in file.columns for columna in columnas_preestablecidas]):
                 form = FormularioSubirDocumento()
-
                 messages.error(request,"The file does not contain the columns it should contain. Please, check the file you are trying to upload.")
-
                 return render(request, "FARMAHOME/subir_documento.html", {"form":form})
             
+            # Check if the date of the deliveries are for today
+            deliveries_dates = file['CITA'].dt.date.unique()
+            if len(deliveries_dates) != 1 or deliveries_dates != today_date:
+                form = FormularioSubirDocumento()
+                messages.error(request,"The file contains deliveries for other than today. Please, check the file you are trying to upload.")
+                return render(request, "FARMAHOME/subir_documento.html", {"form":form})
+
+            # Check if there are any route in progress or not.
+            # If there is no route in progress, every delivery stored in the database for today should be deleted an replaced by the new ones.
+            # If there is a route in progress you shouldn't be able to upload a file.
+            ruta_in_progress = Ruta.objects.filter(fecha_inicio__date=today_date,
+                                                    fecha_fin__isnull=True)
+            if len(ruta_in_progress) == 0:
+                DatoReparto.objects.filter(fecha_cita__date=today_date).delete()
+            else:
+                form = FormularioSubirDocumento()
+                messages.error(request,f"The user {ruta_in_progress[0].usuario} is en route. It is not possible to upload a new file while a user is en route.")
+                return render(request, "FARMAHOME/subir_documento.html", {"form":form})
+
             for index in file.index:
                 new_value = DatoReparto(
                     fecha_cita = file.loc[index,'CITA'],
