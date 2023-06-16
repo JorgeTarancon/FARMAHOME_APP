@@ -121,6 +121,11 @@ def subir_datos(request):
                 form = FormularioSubirDocumento()
                 messages.error(request,f"The user {ruta_in_progress[0].usuario} is en route. It is not possible to upload a new file while a user is en route.")
                 return render(request, "FARMAHOME/subir_documento.html", {"form":form})
+            
+            # Check if there are duplicated directions. If there are any, we add an space at the end of the DIRECCIÓN to make them different.
+            if len(file['DIRECCIÓN'].unique()) != file.shape[0]:
+                for i,index in enumerate(file[file.duplicated(subset='DIRECCIÓN')].index):
+                    file.loc[index,'DIRECCIÓN'] = file.loc[index,'DIRECCIÓN']+' '*(i+1)
 
             for index in file.index:
                 new_value = DatoReparto(
