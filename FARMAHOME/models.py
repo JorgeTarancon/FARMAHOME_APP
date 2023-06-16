@@ -6,7 +6,7 @@ from django.db import models
 class DatoReparto(models.Model):
     
     def __str__(self):
-        return f'Repartir en: {self.direccion}\nEn el CP: {self.codigo_postal}\nMovil: {self.movil}'
+        return f'Repartir en: {self.direccion}\nEn el CP: {self.codigo_postal}\nMovil: {self.movil}\nFecha: {self.fecha_cita}'
     
     fecha_cita = models.DateTimeField(('CITA'))
     codigo_postal = models.PositiveBigIntegerField(('CÓDIGO POSTAL'))
@@ -26,6 +26,10 @@ class DatoReparto(models.Model):
                        ('can_register_data','Can register data.'),)
         
 class Ruta(models.Model):
+
+    def __str__(self):
+        return f'Usuario: {self.usuario}\nFecha inicio: {self.fecha_inicio}\nFecha fin: {self.fecha_fin}'
+    
     usuario = models.CharField(('USUARIO'), max_length=150, blank=False, null=False)
     fecha_inicio = models.DateTimeField(('FECHA_INICIO'), blank=False, null=False)
     fecha_fin = models.DateTimeField(('FECHA_FIN'), blank=False, null=True)
