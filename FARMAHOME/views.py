@@ -10,6 +10,8 @@ from .forms import FormularioEntregarPedido, FormularioSubirDocumento, Formulari
 from datetime import datetime, timedelta
 import pandas as pd
 import xlwt
+import os
+import requests
 #from sqlalchemy import create_engine
 
 def user_login(request):
@@ -68,6 +70,18 @@ def index(request):
                 ruta[0].save()
 
                 messages.success(request,f"Fecha fin de la ruta registrada correctamente: {datetime.strftime(fecha,'%d-%m-%Y %H:%M:%S')}")
+
+#        elif 'refresh_page' in request.POST:
+#            username = ''
+#            api_token = os.environ['API_TOKEN']
+#            domain_name = f"{username}.pythonanywhere.com"
+#            while True:
+#                response = requests.post(
+#                                        f'https://www.pythonanywhere.com/api/v0/user/{username}/webapps/{domain_name}/reload/',
+#                                        headers={'Authorization': f'Token {api_token}'})
+
+#                if response.status_code == 200: messages.success(request,"Page refreshed successfully")
+#                else: messages.error(request,"An error occurred when trying to refresh the page.")
 
         else:
             messages.error(request,"An error has ocurred and we have not been able to register the datetime.")

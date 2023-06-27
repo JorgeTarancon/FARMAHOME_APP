@@ -41,6 +41,16 @@ Aplicación de seguimiento de medicamentos a domicilio
 				</form>
 			</div>
 		{% endif %}
+		
+<!--		{% if perms.FARMAHOME.can_upload_data %}
+		    <div class="div_margin_top_4">
+    		    <form method="post">
+                    {% csrf_token %}
+                    <button class="btn btn-primary" type="submit" name="refresh_page"> Refresh page </button>
+                </form>
+            </div>
+    	{% endif %}-->
+
   	</div>
 
 	<!-- Modal -->
